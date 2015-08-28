@@ -16,10 +16,14 @@ union (x:xs) (y:ys)
             union (removeItem(x,(removeItem(y,xs)))) (removeItem(y, removeItem(x, ys)))
 
 
+
 -- intersecao entre dois conjuntos
+
+-- a = [1,2,3,4,5,1,2,1]
+-- b = [1,9,4,5,3,2,1,7]
 intersect :: [Int] -> [Int] -> [Int]
-intersect [] b = b
-intersect a [] = a
-intersect (x:xs) (y:ys)
-            | x == xs = [x] + intersect xs ys
-            | elem x ys 
+intersect [] b = []
+intersect a [] = []
+intersect (x:xs) b
+            | elem x b = x : intersect (removeItem(x,xs)) (removeItem(x,b))
+            | otherwise = intersect xs b
