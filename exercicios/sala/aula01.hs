@@ -1,11 +1,11 @@
--- uniao entre dois conjuntos
-
+-- funcao para remover item, ja que intersecao e uniao nao contem itens repetidos
 removeItem :: (Int,[Int]) -> [Int]
 removeItem (a,[]) = []
 removeItem (a,li)
             | a == head(li) = [] ++  removeItem (a,tail(li))
             | otherwise = head(li) : removeItem (a,tail(li))
 
+-- uniao entre dois conjuntos
 union :: [Int] -> [Int] -> [Int]
 union [] [] = []
 union a [] = a
