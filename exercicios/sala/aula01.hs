@@ -1,14 +1,14 @@
 -- uniao entre dois conjuntos
-import Data.List
-
-union :: [Int] -> [Int] -> [Int]
-union [] [] = []
-union a [] = a
-union [] b = b
-
 removeItem :: (Int,[Int]) -> [Int]
 removeItem (a,[]) = []
 removeItem (a,li) | a == head(li) = [] ++  removeItem (a,tail(li))
                   | otherwise = head(li) : removeItem (a,tail(li))
 
-
+union :: [Int] -> [Int] -> [Int]
+union [] [] = []
+union a [] = a
+union [] b =    b
+union (x:xs) (y:ys)
+            | x == y = [x] ++ union (removeItem (x, xs)) (removeItem (x,(y:ys)))
+            | otherwise = [x] ++ [y] ++
+            union (removeItem(x,(removeItem(y,xs)))) (removeItem(y, removeItem(x, ys)))
