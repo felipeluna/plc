@@ -5,13 +5,13 @@ type Livro = String
 type BancoDados = [(Pessoa, Livro)]
 
 baseExemplo :: BancoDados
-
 baseExemplo = [
 				("Sergio","O Senhor dos Aneis"),
 				("Andre","Duna"),
 				("Fernando","Jonathan Strange & Mr. Norrell"), 
 				("Fernando","A Game of Thrones")
 			  ]
+              
 			  
 
 			  
