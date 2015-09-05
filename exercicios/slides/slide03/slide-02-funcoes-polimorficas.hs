@@ -23,3 +23,7 @@ takeWhile' a [] = []
 takeWhile' a (x:xs) | a x == True = x : takeWhile' a xs
                     | otherwise = takeWhile' a []
 
+dropWhile' a [] = []
+dropWhile' a (x:xs) | a x == True = dropWhile' a xs
+                    | otherwise = (x:xs)
+
