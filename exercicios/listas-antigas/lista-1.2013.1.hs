@@ -19,7 +19,7 @@ erasto (x:xs) = x : erasto novo
 				where novo = [b | b <- xs, mod b x /= 0]
 
 ehPrimo :: Int -> Bool
-ehPrimo -a = error "Apenas numeros positivos"
+-- ehPrimo -a = error "Apenas numeros positivos"
 ehPrimo 0 = False
 ehPrimo 1 = False
 ehPrimo a = existe a (erasto [2..a])
@@ -31,4 +31,4 @@ ehPrimo a = existe a (erasto [2..a])
 type Ponto = (Double, Double, Double)
 
 distancia :: Ponto -> Ponto -> Double
-distancia (a,b,c)(d,e,f) = sqrt (((a-d)**2) + ((b-e)**2) + ((c-f)**2))
+distancia(a,b,c)(d,e,f) = sqrt (((a-d)**2) + ((b-e)**2) + ((c-f)**2))
