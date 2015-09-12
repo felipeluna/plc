@@ -12,6 +12,10 @@
 table = [('A', "n478rp"), ('D', "1cekml"), ('F', "ht6u0j"), 
           ('G',"d52asx"), ('V', "ziqovb"), ('X', "3y9fwg")]
 
+removeSpaces :: [Char] -> [Char]
+removeSpaces [] = []
+removeSpaces (x:xs) | x == ' ' = removeSpaces xs
+                    | otherwise = x : removeSpaces xs
 existe :: Eq a => a -> [a] -> Bool
 existe a [] = False
 existe a (x:xs) | a == x = True
@@ -33,7 +37,7 @@ procurarTable ((c, l):t) a = (pos a l, c) : procurarTable t a
 removerLixo :: [(Char, Char)] -> [(Char, Char)]
 removerLixo [] = []
 removerLixo ((c, d):l) | c == '0' = removerLixo l
-                        | otherwise = (c,d): removerLixo l
+                       | otherwise = (c,d): removerLixo l
 
 encryptChar a = head $ removerLixo $ procurarTable table a
 
@@ -43,5 +47,5 @@ tuplaString (a,b) = a : [b]
 newString [] = []
 newString (x:xs) = x ++ " " ++ newString xs
 
-encrypt str = init $ newString $ map tuplaString $ map encryptChar str
+encrypt str = init $ newString $ map tuplaString $ map encryptChar $ removeSpaces str
 
