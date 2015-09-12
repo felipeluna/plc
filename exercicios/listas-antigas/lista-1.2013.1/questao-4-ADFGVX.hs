@@ -49,3 +49,4 @@ newString (x:xs) = x ++ " " ++ newString xs
 
 encrypt str = init $ newString $ map tuplaString $ map encryptChar $ removeSpaces str
 
+
