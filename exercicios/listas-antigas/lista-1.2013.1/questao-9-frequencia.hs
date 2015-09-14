@@ -21,8 +21,14 @@ frequencia str chars = ordTupla $ map (freq2 str) chars
 ordTupla :: [(Char, Int)] -> [(Char, Int)]
 ordTupla [] = []
 ordTupla ((a, b):xs)  = ordTupla left ++ ordTupla leftIgual ++ [(a,b)] ++ ordTupla rightIgual ++ ordTupla right
+                              -- left todas as tuplas com freq maior que o pivo
                         where left = [c | c <- xs, snd c >  b]
+                              -- leftIgual tuplas freq igual ao pivo mas
+                              -- com char menor
                               leftIgual = [c | c <- xs, snd c == b, fst c <  a]
+                              -- rightIgual tuplas com freq igual ao pivo
+                              -- mas com char maior
                               rightIgual = [c | c <- xs, snd c == b, fst c >  a]
+                              -- right tuplas com freq menor que o pivo
                               right = [c | c <- xs, snd c <  b]
 
