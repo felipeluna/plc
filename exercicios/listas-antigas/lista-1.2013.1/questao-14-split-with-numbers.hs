@@ -4,6 +4,21 @@
 -- sublistas que foram separadas dessa maneira, e somente aquelas cujo
 -- tamanho não excede o Int passado como parâmetro
 
-split [] char = []
-split (x:xs) char | x /= char = x: split xs
-                  | otherwise = x
+
+
+step a x acc =
+  if x == a
+    then
+      if null (fst acc)
+        then acc
+        else ([], (fst acc) : (snd acc))
+    else (x : fst acc, snd acc)
+
+words' xs a = foldr (step a) ([], []) xs
+
+words2 (a,b) = if null a then b else a:b
+
+
+final xs a = words2 $ words' xs a
+
+fSplitWith str char num = [b | b <- final str char, length b <= num]
