@@ -37,3 +37,16 @@ medd' l = s/t
 medd l = s/t
 	where (s,t) = foldr (\x (s,t)-> (s+x,t+1)) (0,0) l
 
+
+
+-- composicao de funcoes
+
+inc x = x + 1
+dec x = x - 1
+
+entidade x = (inc . dec) x
+
+
+
+
+
