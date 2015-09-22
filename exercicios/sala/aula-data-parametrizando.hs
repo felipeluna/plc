@@ -17,6 +17,8 @@ avB Div = (/)
 
 avU Fatorial = fat
 
+-- avaliar recebe uma funcao a
+avaliar :: a
 avaliar a (Literal n) = a n
 avaliar a (Binaria e op f) = (avB op) (avaliar a e) (avaliar a f)
 avaliar a (Unaria op e) = (avU op) (avaliar a e)
