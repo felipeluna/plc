@@ -2,9 +2,9 @@
 
 fat  a = foldr1 (*) [1..a]
 
-data Exp = Literal Float
-  | Binaria Exp OpB Exp
-  | Unaria OpU Exp
+data Expr t = Literal t
+  | Binaria (Expr t) OpB (Expr t)
+  | Unaria OpU (Expr t)
 
 data OpB = Soma | Mult | Sub | Div
 
@@ -17,9 +17,9 @@ avB Div = (/)
 
 avU Fatorial = fat
 
-avaliar (Literal n) = n
-avaliar (Binaria e op f) = (avB op) (avaliar e) (avaliar f)
-avaliar (Unaria op e) = (avU op) (avaliar e)
+avaliar a (Literal n) = a n
+avaliar a (Binaria e op f) = (avB op) (avaliar a e) (avaliar a f)
+avaliar a (Unaria op e) = (avU op) (avaliar a e)
 
 -- show
 
@@ -30,7 +30,3 @@ showOp Soma = " + "
 showOp Mult = " * "
 showOp Sub = " - "
 showOp Div = " / "
-
-
-
-
