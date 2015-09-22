@@ -1,18 +1,22 @@
 -- definicao de tipos em haskell
 
+fat  a = foldr1 (*) [1..a]
+
 data Exp = Literal Float
   | Binaria Exp OpB Exp
-  | Unaria OpB Exp
+  | Unaria OpU Exp
 
 data OpB = Soma | Mult | Sub | Div
 
 data OpU = Fatorial | Menos
 
-av Soma = (+)
-av Mult = (*)
-av Sub = (-)
-av Div = (/)
+avB Soma = (+)
+avB Mult = (*)
+avB Sub = (-)
+avB Div = (/)
+
+avU Fatorial = fat
 
 avaliar (Literal n) = n
-avaliar (Binaria e op f) = (av op) (avaliar e) (avaliar f)
-avaliar (Unaria op e) = (av op) (avaliar e)
+avaliar (Binaria e op f) = (avB op) (avaliar e) (avaliar f)
+avaliar (Unaria op e) = (avU op) (avaliar e)
