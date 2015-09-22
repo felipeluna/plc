@@ -20,3 +20,13 @@ avU Fatorial = fat
 avaliar (Literal n) = n
 avaliar (Binaria e op f) = (avB op) (avaliar e) (avaliar f)
 avaliar (Unaria op e) = (avU op) (avaliar e)
+
+-- show
+
+showExpr (Literal a) = show a
+showExpr (Binaria e op f) = "(" ++ (showExpr e) ++ (showOp op) ++ (showExpr f) ++ ")"
+
+showOp Soma = " + "
+showOp Mult = " * "
+showOp Sub = " - "
+showOp Div = " / "
