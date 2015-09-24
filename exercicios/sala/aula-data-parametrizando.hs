@@ -1,6 +1,6 @@
 -- definicao de tipos em haskell
 
-fat  a = foldr1 (*) [1..a]
+fat a = foldr1 (*) [1..a]
 
 data Expr t = Literal t
   | Binaria (Expr t) OpB (Expr t)
@@ -18,7 +18,7 @@ avB Div = (/)
 avU Fatorial = fat
 
 -- avaliar recebe uma funcao a
-avaliar :: a
+-- avaliar :: (u -> v) -> Expr a -> v
 avaliar a (Literal n) = a n
 avaliar a (Binaria e op f) = (avB op) (avaliar a e) (avaliar a f)
 avaliar a (Unaria op e) = (avU op) (avaliar a e)
@@ -32,3 +32,5 @@ showOp Soma = " + "
 showOp Mult = " * "
 showOp Sub = " - "
 showOp Div = " / "
+
+
