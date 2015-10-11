@@ -3,9 +3,9 @@
 
 -- lista = [("fat", Fun fatorial), (">0", Fun maior0),("+2", Fun adiciona2)]
 data Valor =  Num Int
-	    | Bool Bool
-            | Erro
-            | Fun (Valor -> Valor)
+	       | Bool Bool
+           | Erro
+           | Fun (Valor -> Valor)
 
 
 overwrite :: (String, Valor) -> [(String, Valor)] -> [(String, Valor)]
@@ -23,8 +23,7 @@ instance Eq Valor where
 	 (Num a) == (Num b) = a == b
 	 (Bool a) == (Bool b) = a == b
 	 Erro == Erro = True
-	 (Fun a) == (Fun b) = a == b -- duvida
-         _==_ = False -- duvida
+     _ == _ = False -- duvida
 
 -- questao 3
 
@@ -34,10 +33,9 @@ data ExpI = Lit Int | VarI Id | Apl Operador ExpI
 type Operador = String
 type Id = String
 
-data Comando =    Atribuicao Id ExpI
-		| Condicional ExpB Comando Comando 
-                | While ExpB Comando
- 		| Composicao Comando Comando	
+data Comando = Atribuicao Id ExpI
+		     | Condicional ExpB Comando Comando 
+             | While ExpB Comando
+ 		     | Composicao Comando Comando	
 
      
-
