@@ -29,7 +29,8 @@ data Filtro = Author [Autor]
             | And Filtro Filtro
             | Or Filtro Filtro
 
-substring = isInfixOf
+substring = isInfixOf -- funcao predefinida em haskell que ve se uma string eh substring de outra. porem ele manda um [String].
+                      -- por isso a funcao isSubstring
 
 interp :: Eq a => Filtro -> [FaceBookPost a] -> [FaceBookPost a]
 interp _ [] = []
@@ -48,18 +49,18 @@ interp (Not filterNot) (p:ps) =
     if elem p filtered
     then interp (Not filterNot) ps
     else p : interp (Not filterNot) ps
-    where filtered = interp filterNot [p]
+    where filtered = interp filterNot (p:ps)
 
-interp f@(And filter1 filter2) (p:ps) =
+interp (And filter1 filter2) (p:ps) =
     if elem p filtered1 && elem p filtered2
-    then p : interp f ps
-    else interp f ps
-    where filtered1 = interp filter1 [p]
-          filtered2 = interp filter2 [p]
+    then p : interp (And filter1 filter2) ps
+    else interp (And filter1 filter2) ps
+    where filtered1 = interp filter1 (p:ps)
+          filtered2 = interp filter2 (p:ps)
 
-interp f@(Or filter1 filter2) (p:ps) =
+interp (Or filter1 filter2) (p:ps) =
     if elem p (filtered1 ++ filtered2)
-    then p : interp f ps
-    else interp f ps
-    where filtered1 = interp filter1 [p]
-          filtered2 = interp filter2 [p]
+    then p : interp (Or filter1 filter2)  ps
+    else interp (Or filter1 filter2) ps
+    where filtered1 = interp filter1 (p:ps)
+          filtered2 = interp filter2 (p:ps)
