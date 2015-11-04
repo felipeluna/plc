@@ -36,8 +36,8 @@ public class Primos extends Thread
 
     public static void main (String[] args)
     {
-        int maxPrimos = 11;
-        int qntThread = 3;
+        int maxPrimos = 70;
+        int qntThread = 5;
         int a = maxPrimos/qntThread;
         int min = 2;
         int max;
@@ -68,6 +68,6 @@ public class Primos extends Thread
             }
         }
         
-        System.out.println("Jonas");
+        System.out.println("Main");
     }
 }
