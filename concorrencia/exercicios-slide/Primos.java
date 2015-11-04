@@ -1,3 +1,6 @@
+/*Implemente um programa que calcula todos os números primos entre 1 e um valor N fornecido como argumento. Seu programa deve dividir o trabalho a ser realizado entre X threads (onde X também é uma entrada do programa) para tentar realizar o trabalho de maneira mais rápida que uma versão puramente sequencial.
+A thread principal do programa deve imprimir os números primos identificados apenas quando as outras threads terminarem. */
+
 public class Primos extends Thread
 {
     int min;
