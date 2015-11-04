@@ -49,6 +49,7 @@ public class Primos extends Thread
 
             (new Primos(min,max)).start();
             min = max + 1;
-        }    
+        } 
+        System.out.println("Jonas");
     }
 }
