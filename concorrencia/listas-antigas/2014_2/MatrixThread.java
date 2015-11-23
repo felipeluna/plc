@@ -1,5 +1,6 @@
-
-
+/*
+2) Faça um programa em java no qual recebe duas matrizes quadráticas nxn, m1 e m2. Então roda m1 * m2 com 1 a n threads (Se aproveitando ao máximo do paralelismo) e retorna os tempos necessários para fazer os cálculos com os diferentes números de threads, ressaltando o que tiver gasto menos tempo.
+*/
 class Multiply extends Thread
 {
 
@@ -48,6 +49,7 @@ public class MatrixThread
     static int x, y,n ; //index of matrix
     public static void main (String [] args)
     {
+
         n = 10;
         x = 0;
         y = -1;
