@@ -4,3 +4,4 @@
 *~
 *.class
 /livros
+.DS_Store
