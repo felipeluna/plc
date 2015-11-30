@@ -1,0 +1,5 @@
+## Problema 5
+
+Utilizando os conceitos do problema do Produtor/Consumidor, desenvolva, usando
+locks explícitos, uma solução para o levantamento dos lanches comprados pelos clientes de uma lanchonete. A lanchonete tem três balcões onde são produzidos os lanches de forma independente. Os lanches podem ser diferentes, e por isso podem ter preços distintos. A quantidade de clientes (deve funcionar para pelo menos 100), o nome de cada cliente, a quantidade de lanches, o nome e preço de cada lanche são valores que devem ser definidos pelo usuário. Você pode considerar que há pelo menos três tipos de lanche
+distintos (você os define) e que a escolha de qual será produzido em dado momento é feita aleatoriamente. Considere que os clientes são particularmente glutões e lancham com grande regularidade, a intervalos aletórios. Imprima na tela, para cada cliente, o nome, os lanches adquiridos e o total gasto. Considere que, em um dia de trabalho, a lanchonete serve pelo menos 10000 lanches.
