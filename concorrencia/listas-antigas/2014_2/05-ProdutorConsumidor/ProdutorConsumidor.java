@@ -21,20 +21,20 @@ class Lanche
 
 class Produtor extends Thread
 {
-    Lanche L;
-    public Produtor(Lanche L)
-    {
-        this.L = L;
-    }
     public void run()
     {
         // add resource in Queue
         ProdutorConsumidor.lock.lock();
         try
         {
-            // try put into the Queue
-        	System.out.println("added: "+ L.toString());
-            ProdutorConsumidor.fila.add(L);
+        	while(ProdutorConsumidor.count < 1000)
+        	{
+        		Lanche L = new Lanche(Integer.toString((int) (Math.random()*100)),(int) (Math.random()*100));
+        		// try put into the Queue
+        		System.out.println("added: "+ L.toString());
+        		ProdutorConsumidor.fila.add(L);
+        		ProdutorConsumidor.count++;
+        	}
         }
         finally
         {
@@ -76,14 +76,30 @@ public class ProdutorConsumidor
     static List<Lanche> fila = new ArrayList<Lanche>();
     static Lock lock = new ReentrantLock();
     static Condition isEmpty = lock.newCondition();
-    
+    static int count = 0;
     public static void main (String [] args) 
     {
     	 Lanche l = new Lanche("temaki",100);
-    	 Produtor p = new Produtor(l);
-         Consumidor c = new Consumidor();
-         p.start();
-         c.start();
+    	 Lanche l2 = new Lanche("sushi",50);
+    	 Lanche l3 = new Lanche("tempura",70);
+
+    	 
+    	 Produtor p1 = new Produtor();
+    	 Produtor p2 = new Produtor();
+    	 Produtor p3 = new Produtor();
+    	 p1.start();
+    	 p2.start();
+    	 p3.start();
+    	 Consumidor [] array = new Consumidor[100];
+    	 
+    	 for(int i = 0; i < array.length;i++)
+    	 {
+    		 
+    		 array[i] = new Consumidor();
+    		 array[i].start();
+    	 }
+
+
 
     }
     
