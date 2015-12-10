@@ -1,105 +1,144 @@
 import java.util.LinkedList;
-import java.util.concurrent.locks.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 class Deque
 {
-    LinkedList<Integer> lista = new LinkedList<Integer>();
-    Lock lesq = new ReentrantLock(true);
-    Lock ldir = new ReentrantLock(true);
-    Lock vazia = new ReentrantLock(true);
-    Condition condVazia = vazia.newCondition();
-    
+
+    LinkedList<Integer> listaE = new LinkedList<Integer>();
+    LinkedList<Integer> listaD = new LinkedList<Integer>();     
+    Lock lE = new ReentrantLock(true);
+    Lock lD = new ReentrantLock(true);
+
     public void push_left(int i)
     {
-        lesq.lock();
+         lE.lock();
+         try
+         {
+            listaE.addFirst(i);
+
+         }
+         finally
+         {
+            lE.unlock();
+         }         
+    }
+    public void push_right(int i)
+    {
+         lD.lock();
+         try
+         {
+            listaD.addLast(i);
+
+         }
+         finally
+         {
+            lD.unlock();
+         }         
+    }
+    public void pop_right()
+    {
+        boolean tryE = false;
+        lD.lock();
         try
         {
-           vazia.lock();
-           try
-           {
-               if(lista.size() == 0)
-               {
-                   System.out.println(i + " entrou numa lista vazia");
-                   lista.addFirst(i);
-               }
-           }
-           finally
-           {
-                vazia.unlock(); 
-           }
-
-           condVazia.signalAll(); 
+            if(listaD.size() == 0 && listaE.size() > 0)
+            {
+                tryE = lE.tryLock();
+                listaE.removeLast();                 
+            }
+            else if(listaD.size() == 0 && listaE.size() == 0)           
+            {
+                
+                System.out.println("listavazia");
+            }
+            else
+            {
+                listaD.removeLast();    
+            }
+                
         }
         finally
         {
-            lesq.unlock();
+            if(tryE == true)
+            {
+                lE.unlock();    
+            }
+            lD.unlock();
         }
     }
-    public void pop_left()
+    
+    public void print()
     {
-        lesq.lock();
-        try
+        for(int i = 0; i < listaE.size(); i++)
         {
-           vazia.lock();
-           try
-           {
-               while(lista.size() == 0)
-               {
-                    try
-                    {
-                        condVazia.await();    
-                    }catch(InterruptedException e) {}
-               }
-           }
-           finally
-           {
-                vazia.unlock(); 
-           }
-           
-           lista.removeFirst(); 
+            System.out.print(listaE.get(i) + " ");
         }
-        finally
+        for(int i = 0; i < listaD.size(); i++)
         {
-            lesq.unlock();
+            System.out.print(listaD.get(i) + " ");
         }
+        System.out.println();
     }
     
     public static void main(String [] args)
     {
         Deque d = new Deque();
-        prod p = new prod(d,4);
-        cons c = new cons(d);
-        p.start();
+        add a = new add(d,3);
+        add b = new add(d,4);
+        add c = new add(d,2);
+        add f = new add(d,6);                       
+        rem r = new rem(d);
+        a.start();
+        b.start();
         c.start();
+        f.start();
+        r.start();
+        try
+        {
+            a.join();
+            b.join();
+            c.join();
+            f.join();                                    
+            r.join();
+        }catch(InterruptedException e){}
+        d.print();
     }
-    
+   
 }
 
-
-class prod extends Thread
+class add extends Thread
 {
     Deque d;
     int i;
-    public prod(Deque d, int i)
+    public add(Deque d, int i)
     {
-        this.d = d;
         this.i = i;
-    }      
+        this.d = d;
+    }
+    
     public void run()
     {
-        d.push_left(i);   
+        d.push_left(i);
+       
+        d.push_right(i+3);
     }
 }
 
-class cons extends Thread
+class rem extends Thread
 {
     Deque d;
-
-    public cons(Deque d)
+    int i;
+    public rem(Deque d)
     {
+        this.i = i;
         this.d = d;
-    }      
+    }
+    
     public void run()
     {
-        d.pop_left();   
+
+       d.pop_right();
+        
     }
 }
+
