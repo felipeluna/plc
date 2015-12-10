@@ -43,13 +43,16 @@ class Deque
         {
             if(listaD.size() == 0 && listaE.size() > 0)
             {
-                tryE = lE.tryLock();
-                listaE.removeLast();                 
+                while(!lE.tryLock())
+                {
+                   //esperar pegar o lock da outra parte da lista.                    
+                }
+                    listaE.removeLast();                 
             }
             else if(listaD.size() == 0 && listaE.size() == 0)           
             {
                 
-                System.out.println("listavazia");
+                System.out.println("lista vazia");
             }
             else
             {
@@ -66,7 +69,41 @@ class Deque
             lD.unlock();
         }
     }
-    
+    public void pop_left()
+    {
+        boolean tryD = false;
+        lE.lock();
+        try
+        {
+            if(listaE.size() == 0 && listaD.size() > 0)
+            {
+                while(!lD.tryLock())
+                {
+                   //esperar pegar o lock da outra parte da lista.                    
+                   System.out.println("deadlock na esquerda");
+                }
+                    listaD.removeLast();                 
+            }
+            else if(listaE.size() == 0 && listaD.size() == 0)           
+            {
+                
+                System.out.println("lista vazia");
+            }
+            else
+            {
+                listaE.removeLast();    
+            }
+                
+        }
+        finally
+        {
+            if(tryD == true)
+            {
+                lD.unlock();    
+            }
+            lE.unlock();
+        }
+    }
     public void print()
     {
         for(int i = 0; i < listaE.size(); i++)
@@ -83,6 +120,8 @@ class Deque
     public static void main(String [] args)
     {
         Deque d = new Deque();
+        
+        
         add a = new add(d,3);
         add b = new add(d,4);
         add c = new add(d,2);
@@ -138,6 +177,7 @@ class rem extends Thread
     {
 
        d.pop_right();
+       d.pop_left();
         
     }
 }
