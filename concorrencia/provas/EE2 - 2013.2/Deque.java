@@ -1,6 +1,7 @@
 import java.util.LinkedList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.Random;
 class Deque
 {
 
@@ -15,7 +16,7 @@ class Deque
          try
          {
             listaE.addFirst(i);
-
+	                   System.out.println("add na esquerda");
          }
          finally
          {
@@ -28,35 +29,40 @@ class Deque
          try
          {
             listaD.addLast(i);
-
+                   System.out.println("add na dreita");
          }
          finally
          {
             lD.unlock();
          }         
     }
-    public void pop_right()
+    public int pop_right()
     {
         boolean tryE = false;
         lD.lock();
+	    int ret = -1;
         try
         {
             if(listaD.size() == 0 && listaE.size() > 0)
             {
-                while(!lE.tryLock())
+		tryE = lE.tryLock();
+                while(!tryE)
                 {
-                   //esperar pegar o lock da outra parte da lista.                    
+		           lE.unlock();
+		           tryE = lE.tryLock();
+                   //esperar pegar o lock da outra parte da lista.    
+                   System.out.println("nao conseguiu o lock na esquerda");                
                 }
-                    listaE.removeLast();                 
+                ret = listaE.removeLast();                 
             }
             else if(listaD.size() == 0 && listaE.size() == 0)           
             {
                 
-                System.out.println("lista vazia");
+                System.out.println("lista vazia direita");
             }
             else
             {
-                listaD.removeLast();    
+                ret = listaD.removeLast();    
             }
                 
         }
@@ -68,30 +74,36 @@ class Deque
             }
             lD.unlock();
         }
+	    return ret;
     }
-    public void pop_left()
+    public int pop_left()
     {
         boolean tryD = false;
         lE.lock();
+	int ret =-1;
         try
         {
             if(listaE.size() == 0 && listaD.size() > 0)
             {
-                while(!lD.tryLock())
+		tryD = lD.tryLock();
+                while(!tryD)
                 {
+	           lD.unlock();
+		   tryD =lD.tryLock();
                    //esperar pegar o lock da outra parte da lista.                    
-                   System.out.println("deadlock na esquerda");
+                   System.out.println("nao conseguiu o lock na esquerda");
                 }
-                    listaD.removeLast();                 
+                   ret = listaD.removeLast();                 
             }
             else if(listaE.size() == 0 && listaD.size() == 0)           
             {
                 
-                System.out.println("lista vazia");
+                System.out.println("lista vazia esquerda");
             }
             else
             {
-                listaE.removeLast();    
+	                   System.out.println("removeu esquerda");
+                ret = listaE.removeLast();    
             }
                 
         }
@@ -103,6 +115,7 @@ class Deque
             }
             lE.unlock();
         }
+	return ret;
     }
     public void print()
     {
@@ -120,31 +133,48 @@ class Deque
     public static void main(String [] args)
     {
         Deque d = new Deque();
-        
-        
-        add a = new add(d,3);
-        add b = new add(d,4);
-        add c = new add(d,2);
-        add f = new add(d,6);                       
-        rem r = new rem(d);
-        a.start();
-        b.start();
-        c.start();
-        f.start();
-        r.start();
-        try
-        {
-            a.join();
-            b.join();
-            c.join();
-            f.join();                                    
-            r.join();
-        }catch(InterruptedException e){}
-        d.print();
+        int n = 4;
+
+		while(n > 0){
+			(new ThreadOperator(n,d)).start();
+			n--;
+		}
     }
    
 }
-
+class ThreadOperator extends Thread{
+	Deque dq;
+	Random randGen;
+	int id;
+ 	public ThreadOperator(int id, Deque dq){
+		this.id = id;
+		this.dq = dq;
+		this.randGen = new Random();
+	}
+	public void run(){
+		while(true){
+			int value = randGen.nextInt(50);
+			int operation = randGen.nextInt(4);
+			try{
+				if(operation == 0){
+					dq.push_left(value);
+					System.out.println(value+" pushed left");
+				}else if(operation == 1){
+					dq.push_right(value);
+					System.out.println(value+" pushed rigth");
+				}else if(operation == 2){
+					value = dq.pop_left();
+					System.out.println(value+" poped from left");
+				}else if(operation == 3){
+					value = dq.pop_right();
+					System.out.println(value+" poped from right");
+				}
+			}catch(Exception e){
+				System.out.println("Ops! "+e.getMessage());				
+			} 
+		}
+	}
+}
 class add extends Thread
 {
     Deque d;
